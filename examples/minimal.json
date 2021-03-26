@@ -1,0 +1,73 @@
+{
+  "nodes": [
+    {
+      "id": 1,
+      "inputs": [],
+      "outputs": [
+        {
+          "key": "filename",
+          "name": "File",
+          "compatible": [],
+          "multi_conns": true,
+          "__class__": "Output"
+        }
+      ],
+      "controls": [
+        {
+          "key": "file_control",
+          "name": "File Path",
+          "type": "file_path",
+          "data": {
+            "filename": "/Users/fergus/Documents/dev/uni/Y4/IndivProj/scaflow/examples/traces/stagegate1.ets"
+          },
+          "__class__": "FileControl"
+        }
+      ],
+      "position": [
+        -681,
+        -325
+      ],
+      "name": "File",
+      "__class__": "FileNode"
+    },
+    {
+      "id": 2,
+      "inputs": [
+        {
+          "key": "filename",
+          "name": "Trace File",
+          "compatible": [],
+          "multi_conns": false,
+          "__class__": "Input"
+        }
+      ],
+      "outputs": [
+        {
+          "key": "traces",
+          "name": "Output",
+          "compatible": [],
+          "multi_conns": true,
+          "__class__": "Output"
+        }
+      ],
+      "controls": [],
+      "position": [
+        -323,
+        -245
+      ],
+      "name": "Trace Input",
+      "__class__": "TraceNode"
+    }
+  ],
+  "edges": [
+    {
+      "id": 1,
+      "input_socket_key": "filename",
+      "output_socket_key": "filename",
+      "input_node_id": 2,
+      "output_node_id": 1,
+      "__class__": "Connection"
+    }
+  ],
+  "__class__": "Graph"
+}

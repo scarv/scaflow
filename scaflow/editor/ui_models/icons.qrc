@@ -1,0 +1,35 @@
+<RCC>
+  <qresource prefix="tango">
+    <file>tango/document-open.svg</file>
+    <file>tango/appointment-new.svg</file>
+    <file>tango/bookmark-new.svg</file>
+    <file>tango/document-new.svg</file>
+    <file>tango/document-print-preview.svg</file>
+    <file>tango/document-print.svg</file>
+    <file>tango/document-properties.svg</file>
+    <file>tango/document-save-as.svg</file>
+    <file>tango/document-save.svg</file>
+    <file>tango/edit-clear.svg</file>
+    <file>tango/edit-copy.svg</file>
+    <file>tango/edit-cut.svg</file>
+    <file>tango/edit-delete.svg</file>
+    <file>tango/edit-find-replace.svg</file>
+    <file>tango/edit-find.svg</file>
+    <file>tango/edit-paste.svg</file>
+    <file>tango/edit-redo.svg</file>
+    <file>tango/edit-undo.svg</file>
+    <file>tango/folder-new.svg</file>
+    <file>tango/go-bottom.svg</file>
+    <file>tango/go-home.svg</file>
+    <file>tango/list-add.svg</file>
+    <file>tango/list-remove.svg</file>
+    <file>tango/media-playback-pause.svg</file>
+    <file>tango/media-playback-start.svg</file>
+    <file>tango/media-playback-stop.svg</file>
+    <file>tango/process-stop.svg</file>
+    <file>tango/system-log-out.svg</file>
+    <file>tango/view-fullscreen.svg</file>
+    <file>tango/view-refresh.svg</file>
+    <file>tango/window-new.svg</file>
+  </qresource>
+</RCC>

@@ -1,0 +1,9 @@
+[report]
+exclude_lines =
+    pragma: no cover
+    if TYPE_CHECKING:
+    if __name__ == "__main__":
+    raise NotImplementedError
+omit =
+    scaflow/editor/ui_models/*
+    *__init__*
