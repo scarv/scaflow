@@ -1,4 +1,7 @@
+from typing import Type
+
 import scared
+from scared import Model
 
 from scaflow.model.dispatcher import dispatcher
 from scaflow.model.node import Node
@@ -15,8 +18,8 @@ class HammingWeightNode(Node):
     @classmethod
     def create_node(cls):
         n = cls()
-        n.add_output(Output("model", "Hamming Weights"))
+        n.add_output(Output("model", "Hamming Weights", return_type="model"))
         return n
 
-    def execute(self, kwargs):
+    def execute(self, kwargs) -> Type[Model]:
         return scared.HammingWeight

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Dict, List, Optional, TYPE_CHECKING, Tuple, TypedDict
+from typing import Dict, List, Optional, TYPE_CHECKING, Tuple, Type, TypedDict
 
 if TYPE_CHECKING:
     from scaflow.model import Connection, Control, Input, Node, Output
@@ -29,6 +29,11 @@ class SocketDict(TypedDict):
 
 class InputDict(SocketDict):
     control: Optional["Control"]
+    accepted_types: List[str]
+
+
+class OutputDict(SocketDict):
+    return_type: str
 
 
 class NodeDict(TypedDict):

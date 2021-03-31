@@ -1,8 +1,11 @@
 import logging
-from typing import Dict
+from typing import Any, Callable, Dict, Type
 
+from estraces import TraceHeaderSet
 import numpy as np
 import scared
+from scared import Model
+from scared.selection_functions import SelectionFunction
 
 from scaflow.model import Input, Node, Output, dispatcher
 
@@ -19,22 +22,26 @@ class CPAAttackNode(Node):
     @classmethod
     def create_node(cls):
         n = cls()
-        traces_input = Input("traces", "Traces")
-        traces_input.add_compatible("peaks")
-        n.add_input(traces_input)
-        n.add_input(Input("selection", "Selection function"))
-        n.add_input(Input("model", "Model"))
-        n.add_input(Input("discriminant", "Discriminant"))
-        n.add_output(Output("output", "Data"))
+        n.add_input(Input("traces", "Traces", accepted_types=["TraceHeaderSet"]))
+        n.add_input(
+            Input(
+                "selection",
+                "Selection function",
+                accepted_types=["selection"],
+            )
+        )
+        n.add_input(Input("model", "Model", accepted_types=["model"]))
+        n.add_input(
+            Input("discriminant", "Discriminant", accepted_types=["discriminant"])
+        )
+        n.add_output(Output("output", "Data", return_type="bool"))
         return n
 
     def execute(self, kwargs) -> Dict[str, any]:
-        traces = kwargs.get("traces")
+        traces: TraceHeaderSet = kwargs.get("traces")
         selection = kwargs.get("selection")
-        model = kwargs.get("model")
+        model: Type[Model] = kwargs.get("model")
         discriminant = kwargs.get("discriminant")
-        # logger.debug(kwargs)
-        # logger.debug(traces, selection, model, discriminant)
         att = scared.CPAAttack(
             selection_function=selection(),
             model=model(),

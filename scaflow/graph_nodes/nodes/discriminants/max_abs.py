@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Any, Callable, Dict
 
 import scared
 
@@ -17,8 +17,8 @@ class MaxAbsNode(Node):
     @classmethod
     def create_node(cls):
         n = cls()
-        n.add_output(Output("discriminant", "Data"))
+        n.add_output(Output("discriminant", "Data", return_type="discriminant"))
         return n
 
-    def execute(self, kwargs) -> Dict[str, any]:
+    def execute(self, kwargs) -> Callable[[Any, Any], Any]:
         return scared.maxabs

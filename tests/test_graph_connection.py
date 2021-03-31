@@ -15,8 +15,8 @@ EXAMPLE_JSON = """{
 
 class TestGraphConnection:
     def test_serialization(self):
-        o = Output("test", "Output")
-        i = Input("test", "Input")
+        o = Output("test", "Output", return_type=str)
+        i = Input("test", "Input", accepted_types=[str])
         c = Connection(
             output_socket_key=o.key, input_socket_key=i.key, input_node=0, output_node=1
         )
@@ -35,8 +35,8 @@ class TestGraphConnection:
         assert n.output_node == 1
 
     def test_repr(self):
-        o = Output("test", "Output")
-        i = Input("test", "Input")
+        o = Output("test", "Output", return_type=str)
+        i = Input("test", "Input", accepted_types=[str])
         c = Connection(
             output_socket_key=o.key, input_socket_key=i.key, input_node=0, output_node=1
         )

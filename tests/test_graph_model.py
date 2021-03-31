@@ -38,6 +38,7 @@ EXAMPLE_JSON = """{
                     "name": "Output",
                     "compatible": [],
                     "multi_conns": true,
+                    "return_type": "str",
                     "__class__": "Output"
                 }
             ],
@@ -66,6 +67,9 @@ EXAMPLE_JSON = """{
                     "compatible": [],
                     "multi_conns": false,
                     "control": null,
+                    "accepted_types": [
+                        "str"
+                    ],
                     "__class__": "Input"
                 }
             ],
@@ -109,11 +113,13 @@ class TestGraphModel:
     def test_add_edge(self):
         g = Graph()
         n = ExampleNode("Test")
-        input_socket = Input("compatible", "Input", multi_conns=True)
+        input_socket = Input(
+            "compatible", "Input", multi_conns=True, accepted_types=["str"]
+        )
         n.add_input(input_socket)
         g.add_node(n)
         n2 = ExampleNode("Test2")
-        output = Output("compatible", "Output")
+        output = Output("compatible", "Output", return_type="str")
         n2.add_output(output)
         g.add_node(n2)
         g.add_edge(output_socket=output, input_socket=input_socket)
@@ -122,7 +128,7 @@ class TestGraphModel:
         assert n.inputs["compatible"].has_connection()
 
         with pytest.raises(Exception):
-            n2.add_output(Output("compatible", "Output"))
+            n2.add_output(Output("compatible", "Output", return_type="str"))
             # g.add_edge(output_socket=n2.outputs["output2"], input_socket=n.inputs["input"])
 
     def test_graph_callback(self):
@@ -143,10 +149,10 @@ class TestGraphModel:
         Connection._last_conn_id = 0
         g = Graph()
         n = ExampleNode("Test")
-        n.add_output(Output("link", "Output"))
+        n.add_output(Output("link", "Output", return_type="str"))
         n.add_control(Control("control", ControlType.FilePath, "File"))
         n2 = ExampleNode("Test")
-        n2.add_input(Input("link", "Input"))
+        n2.add_input(Input("link", "Input", accepted_types=["str"]))
 
         g.add_node(n)
         g.add_node(n2)
@@ -180,29 +186,3 @@ class TestGraphModel:
         assert e.id == 1
         assert e.input_socket_key == "link"
         assert e.output_socket_key == "link"
-
-
-a = """{
-    "edges": [
-        {
-            "id": 1,
-            "input_socket": {
-                "key": "link",
-                "name": "Input",
-                "compatible": [],
-                "multi_conns": false,
-                "control": null,
-                "__class__": "Input"
-            },
-            "output_socket": {
-                "key": "link",
-                "name": "Output",
-                "compatible": [],
-                "multi_conns": true,
-                "__class__": "Output"
-            },
-            "__class__": "Connection"
-        }
-    ],
-    "__class__": "Graph"
-}"""

@@ -38,10 +38,6 @@ class Socket(JsonSerializable):
             )
         return NotImplemented
 
-    def compatible_with(self, socket: "Socket"):
-        # logger.debug("%s, %s", self.key, socket.key)
-        return self.key == socket.key or socket.key in self._compatible
-
     def has_connection(self):
         return len(self.connections) > 0
 
@@ -55,19 +51,3 @@ class Socket(JsonSerializable):
     def add_compatible(self, compatible: str):
         if compatible not in self._compatible:
             self._compatible.append(compatible)
-
-    def as_dict(self) -> SocketDict:
-        return {
-            "key": self.key,
-            "name": self.display_name,
-            "compatible": self._compatible,
-            "multi_conns": self.multi_conns,
-        }
-
-    @classmethod
-    def from_dict(cls, data: SocketDict):
-        socket = cls(
-            key=data["key"], name=data["name"], multi_conns=data["multi_conns"]
-        )
-        socket._compatible = data.get("compatible", [])
-        return socket

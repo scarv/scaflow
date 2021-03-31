@@ -4,6 +4,7 @@ from typing import Dict
 import pytest
 
 from scaflow import model
+from scaflow.model import Input
 from scaflow.model.node import Spacing
 from scaflow.graph_nodes.controls import FileControl
 from scaflow.model.dispatcher import dispatcher
@@ -29,6 +30,9 @@ EXAMPLE_JSON = """{
             "compatible": [],
             "multi_conns": false,
             "control": null,
+            "accepted_types": [
+                "str"
+            ],
             "__class__": "Input"
         }
     ],
@@ -38,6 +42,7 @@ EXAMPLE_JSON = """{
             "name": "",
             "compatible": [],
             "multi_conns": true,
+            "return_type": "str",
             "__class__": "Output"
         }
     ],
@@ -89,7 +94,7 @@ class TestGraphNode:
 
     def test_inputs(self):
         n = ExampleNode("Test")
-        i = model.Input("input", "")
+        i = model.Input("input", "", accepted_types=["str"])
         n.add_input(i)
         assert len(n.inputs) == 1
         assert i.key in n.inputs
@@ -98,7 +103,7 @@ class TestGraphNode:
 
     def test_outputs(self):
         n = ExampleNode("Test")
-        o = model.Output("output", "")
+        o = model.Output("output", "", return_type="str")
         n.add_output(o)
         assert len(n.outputs) == 1
         assert o.key in n.outputs
@@ -107,13 +112,13 @@ class TestGraphNode:
 
     def test_duplicate_key_raises_exception(self):
         n = ExampleNode("Test")
-        n.add_input(model.Input("input", ""))
+        n.add_input(model.Input("input", "", accepted_types=["str"]))
         with pytest.raises(Exception):
-            n.add_input(model.Input("input", ""))
+            n.add_input(model.Input("input", "", accepted_types=["str"]))
 
     def test_already_assigned_node_raises_error(self):
         n = ExampleNode("Test")
-        i = model.Input("input", "")
+        i = model.Input("input", "", accepted_types=["str"])
         n.add_input(i)
         n2 = ExampleNode("Test2")
         with pytest.raises(Exception):
@@ -137,13 +142,12 @@ class TestGraphNode:
     def test_serialization(self):
         model.Node._last_node_id = 0
         n = ExampleNode("Test")
-        n.add_input(model.Input("input", ""))
+        n.add_input(Input("input", "", accepted_types=["str"]))
         n.add_control(FileControl("file", "File"))
-        n.add_output(model.Output("output", ""))
+        n.add_output(model.Output("output", "", return_type="str"))
         n.position = (100, 100)
 
         json_data = json.dumps(n, default=dispatcher.encoder_default, indent=4)
-        print(json_data)
         assert json_data == EXAMPLE_JSON
 
     def test_deserialization(self):

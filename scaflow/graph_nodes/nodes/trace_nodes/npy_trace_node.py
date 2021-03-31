@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 
 import estraces
+from estraces import TraceHeaderSet
 import numpy as np
 
 from scaflow.model.dispatcher import dispatcher
@@ -23,10 +24,10 @@ class NpyTraceNode(Node):
     @classmethod
     def create_node(cls):
         n = cls()
-        n.add_input(Input("filename", "Trace File"))
-        n.add_input(Input("plaintext", "Plaintext File"))
-        n.add_input(Input("ciphertext", "Ciphertext File"))
-        n.add_output(Output("traces", "Output"))
+        n.add_input(Input("filename", "Trace File", accepted_types=["str"]))
+        n.add_input(Input("plaintext", "Plaintext File", accepted_types=["str"]))
+        n.add_input(Input("ciphertext", "Ciphertext File", accepted_types=["str"]))
+        n.add_output(Output("traces", "Output", return_type="TraceHeaderSet"))
         return n
 
     def execute(self, kwargs):

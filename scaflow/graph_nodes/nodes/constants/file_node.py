@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List, Type
 
 from scaflow.model.node import Node
 from scaflow.model.output_socket import Output
@@ -17,7 +17,7 @@ class FileNode(Node):
     @classmethod
     def create_node(cls):
         c = cls()
-        output = Output("filename", "File")
+        output = Output("filename", "File", return_type="str")
         c.add_output(output)
         c.add_control(FileControl("file_control", "File Path"))
         return c

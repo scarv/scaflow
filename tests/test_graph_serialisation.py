@@ -7,7 +7,7 @@ from scaflow.model import Output, dispatcher
 
 class TestGraphSerialisation:
     def test_socket_json(self):
-        output = Output("key", "name")
+        output = Output("key", "name", return_type="str")
         json_data = json.dumps(output, default=dispatcher.encoder_default)
 
         output2: Output = json.loads(json_data, object_hook=dispatcher.decoder_hook)
