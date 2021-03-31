@@ -1,7 +1,8 @@
 import logging
-from typing import Dict, List
+from typing import Dict
 
 from scaflow import model
+from scaflow.model import Connection, Input, Node
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +13,7 @@ class EngineNode:
         self.output_data = None
 
     @property
-    def node(self):
+    def node(self) -> Node:
         return self._node
 
 
@@ -31,23 +32,30 @@ class Engine:
     def _get_input_data(self, engine_node: EngineNode) -> Dict[str, any]:
         logger.debug("Getting inputs for node: %s", engine_node.node)
         input_data: Dict[str, any] = {}
-        logger.debug("Inputs: %s", engine_node.node.inputs)
+        i: Input
         for i in engine_node.node.inputs.values():
-            # logger.debug(i.connections)
+            conn: Connection
             for conn in i.connections:
-                if conn.output_node_id:
-                    outputs = self._process_node(conn.output_node_id)
+                logger.debug("Connection: %s", conn)
+                outputs = self._process_node(conn.output_node)
 
-                    input_data[conn.input_socket_key] = outputs
-        # logger.debug(input_data)
+                input_data[conn.output_socket_key] = outputs
         return input_data
 
     def _process_node(self, node_id) -> Dict[str, any]:
-        engine_node = EngineNode(self._graph[node_id])
-        self._engine_graph[node_id] = engine_node
-        logger.debug("Processing node: %s", engine_node.node)
-        if not engine_node.output_data:
+        if node_id in self._engine_graph:
+            engine_node = self._engine_graph[node_id]
+        else:
+            engine_node = EngineNode(self._graph[node_id])
+            self._engine_graph[node_id] = engine_node
+        if engine_node.output_data is None:
+            logger.debug("Processing node: %s", engine_node.node)
+
             input_data = self._get_input_data(engine_node)
+            logger.debug(
+                "Executing node: %s, with input data: %s", engine_node.node, input_data
+            )
             engine_node.output_data = engine_node.node.execute(input_data)
+            logger.debug("Result: %s", engine_node.output_data)
             self._visited.append(node_id)
         return engine_node.output_data

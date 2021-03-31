@@ -9,9 +9,9 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from scaflow import editor, model
+from scaflow import editor
 from scaflow.editor.editor_widget import EditorWidget
-from scaflow.model.base import Control
+from scaflow.model import Control
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ class NodeControl(EditorWidget):
         # Minus the height because of rounded edges (diameter height)
         self._text_width = self._total_width - self._total_height
 
-        self._placeholder_text = QGraphicsTextItem(self._control.display_name, self)
+        self._placeholder_text = QGraphicsTextItem(self._control._display_name, self)
         self._placeholder_text.setPos(self._total_height / 2, 0)
         self._placeholder_text.setDefaultTextColor("#545454")
 

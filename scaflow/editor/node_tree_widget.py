@@ -4,6 +4,8 @@ from PySide6 import QtCore, QtGui, QtWidgets
 
 from scaflow import editor
 
+logger = logging.getLogger(__name__)
+
 
 class NodeTreeWidget(QtWidgets.QTreeWidget):
     """Tree of nodes that appears on the left side of editor.
@@ -17,10 +19,10 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
         self.logger = logging.getLogger(__name__)
         self._parent = ui
 
-        for node_type in self._parent.graph.node_types:
+        for node_type in self._parent.node_types:
             type_header = QtWidgets.QTreeWidgetItem(self, [node_type])
             type_header.setExpanded(True)
-            for node in self._parent.graph.node_types[node_type]:
+            for node in self._parent.node_types[node_type]:
                 item = QtWidgets.QTreeWidgetItem(type_header, [node.display_name])
                 item.setData(1, 0, (node_type, node))
 
@@ -36,16 +38,19 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
         drag = QtGui.QDrag(self)
         mime = QtCore.QMimeData()
         selected_item: QtWidgets.QTreeWidgetItem = self.selectedItems()[0].data(1, 0)
-        mime.setData(
-            "node",
-            QtCore.QByteArray(
-                bytes(f"{selected_item[0]}/{selected_item[1].display_name}", "utf-8")
-            ),
-        )
-        mime.setText(f"{selected_item[0]}/{selected_item[1].display_name}")
-        # self.logger.debug(f"{selected_item[0]}/{selected_item[1].name}")
-        drag.setMimeData(mime)
-        drag.exec_(supported_actions)
+        if selected_item:
+            mime.setData(
+                "node",
+                QtCore.QByteArray(
+                    bytes(
+                        f"{selected_item[0]}/{selected_item[1].display_name}", "utf-8"
+                    )
+                ),
+            )
+            mime.setText(f"{selected_item[0]}/{selected_item[1].display_name}")
+            # self.logger.debug(f"{selected_item[0]}/{selected_item[1].name}")
+            drag.setMimeData(mime)
+            drag.exec_(supported_actions)
 
     def _node_clicked(self, item: QtWidgets.QTreeWidgetItem):
         # self.logger.debug(item.data(1, 0))

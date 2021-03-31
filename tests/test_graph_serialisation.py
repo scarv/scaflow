@@ -1,18 +1,16 @@
+import json
+
 import pytest
 
-from scaflow import model
-from scaflow.model.dispatcher import dispatcher
-import json
+from scaflow.model import Output, dispatcher
 
 
 class TestGraphSerialisation:
     def test_socket_json(self):
-        output = model.base.Output("key", "name")
+        output = Output("key", "name")
         json_data = json.dumps(output, default=dispatcher.encoder_default)
 
-        output2: model.base.Output = json.loads(
-            json_data, object_hook=dispatcher.decoder_hook
-        )
+        output2: Output = json.loads(json_data, object_hook=dispatcher.decoder_hook)
 
         assert type(output2) == type(output)
         assert output.key == output2.key
@@ -25,5 +23,5 @@ class TestGraphSerialisation:
         with pytest.raises(TypeError):
 
             @dispatcher
-            class Invalid:
+            class _:
                 pass

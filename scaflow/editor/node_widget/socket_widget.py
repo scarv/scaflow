@@ -4,7 +4,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 from PySide6.QtGui import QColor, QPen
 
 from scaflow.editor.editor_widget import EditorWidget
-from scaflow.model.base import Socket
+from scaflow.model import Socket
 
 if TYPE_CHECKING:
     from scaflow.editor import NodeWidget

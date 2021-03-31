@@ -6,7 +6,7 @@ from PySide6.QtGui import QFontMetrics
 from PySide6.QtWidgets import QFileDialog, QGraphicsItem, QGraphicsSceneMouseEvent
 
 from scaflow import editor
-from scaflow.model.base import Control
+from scaflow.model import Control
 from ..node_control import NodeControl
 
 logger = logging.getLogger(__name__)
@@ -25,7 +25,7 @@ class FilenameControl(NodeControl):
         self.setFlag(
             QGraphicsItem.ItemIsSelectable
         )  # Needed in order to receive click events
-        filename = self._control.data.get("filename", None)
+        filename = self._control._data.get("filename", None)
         if filename:
             self._set_filename(filename)
 

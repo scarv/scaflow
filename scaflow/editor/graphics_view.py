@@ -170,7 +170,7 @@ class GraphicsView(QGraphicsView):
         if node:
             node_type, node = [str(s, "utf-8") for s in node.split("/")]
             # logger.debug("%s, %s", node_type, node)
-            for n in self._parent.graph.node_types[node_type]:
+            for n in self._parent.node_types[node_type]:
                 if n.display_name == node:
                     event.acceptProposedAction()
                     self._parent.add_node_option(n, [pos.x(), pos.y()])

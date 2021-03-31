@@ -2,7 +2,7 @@ import logging
 import rich.logging
 
 logging.basicConfig(
-    level="INFO",
+    level="NOTSET",
     format="%(module)s.%(funcName)s: %(message)s",
     datefmt="[%X]",
     handlers=[rich.logging.RichHandler(rich_tracebacks=True)],

@@ -16,6 +16,7 @@ numpy = "^1.20.0"
 pytest = "^6.2.2"
 scared = "^0.8.13"
 matplotlib = "^3.3.4"
+pytest-mock = "^3.5.1"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.10.0"

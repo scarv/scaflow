@@ -12,7 +12,7 @@ from PySide6.QtWidgets import (
 
 from scaflow import editor, model
 from scaflow.editor.edge_widget import EdgeWidget
-from scaflow.model.base import Connection, Input, Output
+from scaflow.model import Connection, Input, Output
 
 if TYPE_CHECKING:
     from scaflow.editor import NodeWidget
@@ -59,14 +59,14 @@ class GraphicsScene(QGraphicsScene):
 
     def add_edge(self, connection: Connection):
         logger.debug("Adding edge %s", connection)
-        output_node_widget = self.node_widgets[connection.output_node_id]
-        input_node_widget = self.node_widgets[connection.input_node_id]
+        output_node_widget = self.node_widgets[connection.output_node]
+        input_node_widget = self.node_widgets[connection.input_node]
 
         # logger.debug(output_node_widget._sockets)
-        output_socket = output_node_widget._sockets[connection.output_socket_key]
-        input_socket = input_node_widget._sockets[connection.input_socket_key]
+        output_socket_widget = output_node_widget._sockets[connection.output_socket_key]
+        input_socket_widget = input_node_widget._sockets[connection.input_socket_key]
 
-        edge_widget = EdgeWidget(output_socket, input_socket)
+        edge_widget = EdgeWidget(output_socket_widget, input_socket_widget)
         self.addItem(edge_widget)
 
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent):
@@ -148,7 +148,9 @@ class GraphicsScene(QGraphicsScene):
                 src_dag = source_conn.socket
                 dest_dag = dest_conn.socket
 
-                if src_dag.compatibleWith(dest_dag) or dest_dag.compatibleWith(src_dag):
+                if src_dag.compatible_with(dest_dag) or dest_dag.compatible_with(
+                    src_dag
+                ):
                     if isinstance(src_dag, Input) and isinstance(dest_dag, Output):
                         self.graph.add_edge(dest_dag, src_dag)
                     elif isinstance(src_dag, Output) and isinstance(dest_dag, Input):
@@ -210,7 +212,7 @@ class GraphicsScene(QGraphicsScene):
                     return False
 
                 for edge in dest.connections.values():
-                    logger.warning('forcing edge removal: "%s"', edge.display_name)
+                    logger.warning('forcing edge removal: "%s"', edge._display_name)
                     edge.close()
                 return True
 

@@ -6,7 +6,7 @@ from PySide6.QtGui import QFontMetrics
 
 from scaflow import editor
 from scaflow.editor.editor_widget import EditorWidget
-from scaflow.model.base import Node
+from scaflow.model import Node
 
 
 class NodeText(EditorWidget):

@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Type
 from PySide6 import QtCore, QtGui, QtWidgets
 
 from scaflow.editor.editor_widget import EditorWidget
-from scaflow.model.base import ControlType, Node
+from scaflow.model import ControlType, Node
 from .controls.filename_control import FilenameControl
 from .node_background import NodeBackground
 from .node_control import NodeControl
@@ -113,28 +113,6 @@ class NodeWidget(EditorWidget):
     def draw_sockets(self):
         """Calculate positions and create socket widgets for node"""
 
-        def draw_socket_pos(key, socket, pos_x: int, align_right):
-            """Create a socket widget at a given position, specifying alignment.
-
-            Args:
-                key: Key to access socket information
-                socket: Socket model
-                pos_x: X position (in widget space) to render socket at
-                align_right: Position text on the right of the node
-            """
-            socket_widget: Optional[SocketWidget] = None
-            if key in self._sockets:
-                socket_widget = self._sockets[key]
-
-            if socket_widget is None:
-                logger.debug("Adding socket <%s>", key)
-
-                socket_widget = SocketWidget(self, socket, align_right)
-                self._sockets[key] = socket_widget
-
-            socket_widget.setPos(QtCore.QPointF(pos_x, self._current_height_offset))
-            self._current_height_offset += socket.height
-
         # self._current_height_offset = (
         #     self._node.padding.top + self._text.height + Socket.height / 2
         # )
@@ -159,7 +137,7 @@ class NodeWidget(EditorWidget):
             else:
                 logger.debug("Adding control widget <%s>", k)
 
-                control_widget = control_widget_map[v.type](
+                control_widget = control_widget_map[v._type](
                     self, self._node.inner_width, 25, v
                 )
                 self._controls[k] = control_widget

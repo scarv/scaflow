@@ -3,7 +3,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Optional, Type
+from typing import Dict, List, Optional, Type
 
 from PySide6.QtCore import QFile, QIODevice
 from PySide6.QtUiTools import QUiLoader
@@ -13,6 +13,8 @@ from scaflow import editor, engine, model
 
 # noinspection PyUnresolvedReferences
 from .ui_models import icons_rc
+from ..graph_nodes import nodes
+from ..model import Node
 from ..model.dispatcher import dispatcher
 
 logger = logging.getLogger(__name__)
@@ -66,6 +68,31 @@ class ScaflowUI(
     def _show_about():
         dlg = editor.AboutUI()
         dlg.exec_()
+
+    @property
+    def node_types(
+        self,
+    ) -> Dict[str, List[Type[Node]]]:
+        """All supported node types, used in creation of context menus.
+
+        Returns:
+            A nested list of strings identifying types of nodes allowed within the editor
+        """
+        return {
+            "Constants": [
+                nodes.TraceFileNode,
+                nodes.PlaintextFileNode,
+                nodes.CiphertextFileNode,
+            ],
+            "Input": [nodes.ETSTraceNode, nodes.NpyTraceNode],
+            "Output": [],
+            "Selection": [nodes.FirstSubBytesNode],
+            "Model": [nodes.HammingWeightNode],
+            "Discriminants": [nodes.MaxAbsNode],
+            "Attack": [nodes.CPAAttackNode],
+            "Preprocessing": [nodes.FindPeaksNode]
+            # "Processing": [nodes.SplitNode, nodes.ConcatNode],
+        }
 
     def add_node_option(self, node_type: "Type[model.Node]", pos):
         logger.info("Adding node to graph: %s", node_type)
